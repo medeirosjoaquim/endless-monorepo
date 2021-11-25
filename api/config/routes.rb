@@ -2,6 +2,6 @@ Rails.application.routes.draw do
   match '/' => 'podcasts#index', via: :get
   match '/' => 'podcasts#fetch_rss', via: :post
   match '/list' => 'podcasts#list', via: :get
-  get "/podcast/:id", to: "podcast#show"
+  get "/podcast/:id", to: "podcasts#show"
   match 'test' => 'podcasts#test', via: :post
 end
