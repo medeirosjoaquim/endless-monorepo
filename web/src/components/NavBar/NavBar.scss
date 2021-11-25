@@ -1,0 +1,12 @@
+.navbar--wrapper {
+  text-align: center;
+  ul {
+    margin: 0 auto;
+    width: 50%;
+    display: flex;
+    li {
+      list-style-type: none;
+      margin: 8px;
+    }
+  }
+}

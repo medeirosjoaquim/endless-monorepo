@@ -1,0 +1,182 @@
+<html>
+
+<head>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background-color: beige;
+    }
+
+    ul#links {
+      cursor: pointer;
+      width: 200px;
+      border: 1px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    ul#links li {
+      margin: 8px;
+      list-style: none;
+    }
+
+    ul#links li:hover {
+      color: #ffa500;
+      background-color: #000;
+    }
+
+    .podcast__info {
+      cursor: pointer;
+      margin: 8px;
+      background-color: #eee;
+      padding: 24px;
+      max-width: 600px;
+    }
+
+    .podcast__info:hover {
+      background-color: #ccc;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+      border-bottom: 2px solid #000;
+    }
+
+    .summary {
+      line-height: 24px;
+    }
+
+    #logo {
+      font-size: 24px;
+    }
+
+    #avatar {
+      cursor: pointer;
+      height: 50px;
+      width: 50px;
+    }
+  </style>
+</head>
+
+<body x-data>
+  <nav>
+    <button @click="console.log($store.page)">Say Hi</button>
+    <div id="logo">🎙️</div>
+    <ul id="links">
+      <li x-on:click="$store.page = 'home'">home</li>
+      <!-- <li x-on:click="page = 'podcasts'">podcasts</li> -->
+      <li x-on:click="$store.page = 'playlists'">playlists</li>
+      <li x-on:click="$store.page = 'search'">search</li>
+    </ul>
+    <div id="avatar">
+      <img src="https://avatars.dicebear.com/api/adventurer/this%20is%20my%20avatgar.svg" alt="avatar">
+    </div>
+  </nav>
+  <template x-if="$store.page === 'home' && $store.podcasts.data">
+    <div class="main">
+      <h1 x-data="{ message: 'I ❤️ Podcasts' }" x-text="message"></h1>
+      <ul x-data="{ podcasts: $store.podcasts.data }">
+        <template x-for="podcast in podcasts">
+          <div class="podcast__info">
+            <span class="title" x-text="podcast.title"></span>
+            <span class="summary" x-html="podcast.summary"></span>
+          </div>
+        </template>
+      </ul>
+    </div>
+  </template>
+  <template x-if="$store.page === 'playlists'">
+    <h1 x-data="{ message: 'I ❤️ playlists' }" x-text="message"></h1>
+  </template>
+  <template x-if="$store.page    === 'search'">
+    <div class="main" x-data="{ searchContent: '' }">
+      <h1 x-data=" { message: 'Add RSS feed to fetch podcast' }" x-text="message">
+      </h1>
+      <div class="search__wrapper">
+        <input type="text" x-on:change="searchContent = $event.target.value">
+        <button type="submit" x-on:click="fetchPodcast(searchContent)">fetch</button>
+        <button type="submit" x-on:click="changePage()">page</button>
+      </div>
+    </div>
+  </template>
+  <!-- <template x-if="page === 'podcasts'" x-data="{ message: 'I ❤️ podcasts'} ">
+    <div>
+      <h1 x-text="message"></h1>
+      <span x-text="getTodos"></span>
+    </div>
+  </template> -->
+  <script>
+
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('page', 'home')
+      Alpine.store('darkMode', {
+        isDark: false,
+        toggle() {
+          this.isDark = !this.on
+        }
+      })
+      Alpine.store('podcasts', {
+        data: null,
+        async getPodcasts() {
+          let response = await fetch('http://localhost:3000/list')
+            .then(response => response.json())
+            .then(data => this.data = data)
+        }
+      })
+      Alpine.store('podcasts').getPodcasts()
+    })
+
+
+    // Example POST method implementation:
+    async function fetchPodcast(url = '') {
+      if (url) {
+        const response = await fetch('http://localhost:3000', {
+          method: 'POST',
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ url })
+        });
+        if (response.ok) {
+          Alpine.store('page', 'home')
+          return response.json();
+        } else {
+          Alpine.store('page', 'home')
+        }
+      }
+    }
+    function changePage() {
+      console.log(Alpine.data)
+    }
+    // async function getPodcasts() {
+    //   let response = await fetch('https://jsonplaceholder.typicode.com/todos/1')
+    //     .then(response => response.json())
+    //   return await response.title
+    // }
+  </script>
+</body>
+
+</html>
