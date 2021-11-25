@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;500;700&display=swap" rel="stylesheet">
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    .keywords {
+      background-color: blanchedalmond;
+      display: flex;
+      flex-wrap: wrap;
+      padding: 4px;
+      align-items: center;
+    }
+  </style>
+  <title x-data="{ message: 'I ❤️ Alpine' }" x-text="message"></title>
+</head>
+
+<body x-data>
+  <nav>
+    <button @click="console.log($store.page)">Say Hi</button>
+    <div id="logo">🎙️</div>
+    <ul id="links">
+      <li x-on:click="$store.page = 'home'">home</li>
+      <!-- <li x-on:click="page = 'podcasts'">podcasts</li> -->
+      <li x-on:click="$store.page = 'playlists'">playlists</li>
+      <li x-on:click="$store.page = 'search'">search</li>
+    </ul>
+    <div id="avatar">
+      <img src="https://avatars.dicebear.com/api/adventurer/this%20is%20my%20avatgar.svg" alt="avatar">
+    </div>
+  </nav>
+  <div class="main">
+    <template x-if="$store.podcast.current">
+      <div>
+        <h1 x-text="$store.podcast.current.title"></h1>
+        <p class="summary" x-text="$store.podcast.current.summary"></p>
+        <template x-if="$store.podcast.current.keywords">
+          <div>
+            <span>Keywords:</span>
+            <div class="keywords">
+              <template x-for="keyword in $store.podcast.current.keywords">
+                <li x-text="keyword"></li>
+              </template>
+            </div>
+          </div>
+        </template>
+        <template x-if="$store.podcast.current.feed">
+          <div>
+            <span>Feed:</span>
+            <template x-for="episode in $store.podcast.current.feed">
+              <div>
+                <span x-text="episode.title"></span>
+              </div>
+            </template>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+  <script>
+    const id = document.URL.split('#')[1]
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('podcast', {
+        async init() {
+          this.current = await fetch(`http://localhost:3000/podcast/${id}`)
+            .then(response => response.json())
+        },
+        current: null,
+      })
+      console.log(Alpine.store('podcast'))
+    })
+  </script>
+</body>
+
+</html>

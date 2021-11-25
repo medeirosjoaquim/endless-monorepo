@@ -2,79 +2,12 @@
 
 <head>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;500;700&display=swap" rel="stylesheet">
   <style>
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-    }
 
-    .main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      background-color: beige;
-    }
-
-    ul#links {
-      cursor: pointer;
-      width: 200px;
-      border: 1px solid;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    ul#links li {
-      margin: 8px;
-      list-style: none;
-    }
-
-    ul#links li:hover {
-      color: #ffa500;
-      background-color: #000;
-    }
-
-    .podcast__info {
-      cursor: pointer;
-      margin: 8px;
-      background-color: #eee;
-      padding: 24px;
-      max-width: 600px;
-    }
-
-    .podcast__info:hover {
-      background-color: #ccc;
-    }
-
-    .title {
-      font-size: 16px;
-      font-weight: bold;
-      display: block;
-      margin-bottom: 8px;
-      border-bottom: 2px solid #000;
-    }
-
-    .summary {
-      line-height: 24px;
-    }
-
-    #logo {
-      font-size: 24px;
-    }
-
-    #avatar {
-      cursor: pointer;
-      height: 50px;
-      width: 50px;
-    }
   </style>
 </head>
 
@@ -97,10 +30,12 @@
       <h1 x-data="{ message: 'I ❤️ Podcasts' }" x-text="message"></h1>
       <ul x-data="{ podcasts: $store.podcasts.data }">
         <template x-for="podcast in podcasts">
-          <div class="podcast__info">
-            <span class="title" x-text="podcast.title"></span>
-            <span class="summary" x-html="podcast.summary"></span>
-          </div>
+          <a x-bind:href="'detail.html' + '#' + podcast.id">
+            <div class="podcast__info">
+              <span class="title" x-text="podcast.title"></span>
+              <span class="summary" x-html="podcast.summary"></span>
+            </div>
+          </a>
         </template>
       </ul>
     </div>
@@ -119,12 +54,6 @@
       </div>
     </div>
   </template>
-  <!-- <template x-if="page === 'podcasts'" x-data="{ message: 'I ❤️ podcasts'} ">
-    <div>
-      <h1 x-text="message"></h1>
-      <span x-text="getTodos"></span>
-    </div>
-  </template> -->
   <script>
 
     document.addEventListener('alpine:init', () => {
