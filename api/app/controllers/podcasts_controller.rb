@@ -2,8 +2,11 @@ class PodcastsController < ApplicationController
 
   require "rss"
   require "open-uri"
+  #https://guides.rubyonrails.org/active_record_callbacks.html
+  #https://blog.saeloun.com/2019/10/29/rails-6-after-save-commit.html
+  #after_save_commit :log_user_saved_to_db
 
-  skip_before_action :verify_authenticity_token, :only => [:index, :fetch_rss]
+  skip_before_action :verify_authenticity_token, :only => [:index, :fetch_rss, :podcast_by_url]
   
   def index
     @podcasts = Podcast.all
@@ -50,6 +53,7 @@ class PodcastsController < ApplicationController
           summary = rss.channel.itunes_summary
           keywords = rss.channel.itunes_keywords
           category = rss.channel.itunes_category.text
+          
           Podcast.new(title: title, 
           summary: summary,
           url: data['url'], 
@@ -76,5 +80,13 @@ class PodcastsController < ApplicationController
       @podcast = Podcast.find(params[:id])
 			render json: @podcast
     end
-    
+    def podcast_by_url
+      data = JSON.parse(request.body.read)
+      @podcast = Podcast.where(url: data['url']).take
+      if @podcast
+        render json: @podcast
+      else
+        render plain: 'Not Found', :status => '404' and return
+      end
+    end
   end
