@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   match '/podcast/url' => 'podcasts#podcast_by_url', via: :post
   get '/podcast/:id', to: 'podcasts#show'
   match 'test' => 'podcasts#test', via: :post
+  mount ActionCable.server => '/cable'
+
 end

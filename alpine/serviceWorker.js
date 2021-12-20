@@ -15,8 +15,27 @@
 //   console.log('installed')
 // });
 self.addEventListener('message', event => {
-  console.log(event)
-  if (event.data.action === 'fetchPodcast') {
-    console.log(event.data.url)
-  }
+  setTimeout(() => {
+    console.log(event)
+    self.postMessage("aaaaa")
+  }, 1000);
+
+  return
+  // if (event.data.action === 'fetchPodcast') {
+  //   const response = await fetch('http://localhost:3000', {
+  //     method: 'POST',
+  //     mode: 'cors',
+  //     cache: 'no-cache',
+  //     credentials: 'same-origin',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({ event.data.url })
+  //   })
+  //   if (response.ok) {
+  //     Alpine.store('page', 'home')
+  //     return response.json();
+  //   }
+  //   console.log()
+  // }
 })

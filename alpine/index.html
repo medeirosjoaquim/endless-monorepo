@@ -89,7 +89,7 @@
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ url })
-        });
+        })
         if (response.ok) {
           Alpine.store('page', 'home')
           return response.json();
@@ -107,7 +107,14 @@
     //   return await response.title
     // }
     const worker = new Worker('./serviceWorker.js')
-    worker.postMessage({ action: 'fetchPodcast', url: 'xyz' })
+    worker.addEventListener('message', event => {
+      console.log("client", event)
+      console.log("client", event)
+      console.log("client", event)
+      console.log("client", event)
+      console.log("client", event)
+    })
+    worker.postMessage({ action: 'fetchPodcast', url: 'xyz ' })
   </script>
 </body>
 
