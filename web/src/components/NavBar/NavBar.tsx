@@ -37,6 +37,40 @@ const NavLink = ({ children, path }: { children: ReactNode, path: string }) => (
   </Link>
 )
 
+export const NavMenu = () => {
+  return <Menu>
+    <MenuButton
+      as={Button}
+      rounded={'full'}
+      variant={'link'}
+      cursor={'pointer'}
+      minW={0}>
+      <Avatar
+        size={'sm'}
+        src={'https://avatars.dicebear.com/api/adventurer/this%20is%20my%20avatgar.svg'}
+      />
+    </MenuButton>
+    <MenuList alignItems={'center'}>
+      <br />
+      <Center>
+        <Avatar
+          size={'2xl'}
+          src={'https://avatars.dicebear.com/api/adventurer/this%20is%20my%20avatgar.svg'}
+        />
+      </Center>
+      <br />
+      <Center>
+        <p>Username</p>
+      </Center>
+      <br />
+      <MenuDivider />
+      <MenuItem>Your Servers</MenuItem>
+      <MenuItem>Account Settings</MenuItem>
+      <MenuItem>Logout</MenuItem>
+    </MenuList>
+  </Menu>
+}
+
 export default function NavBar() {
   const { colorMode, toggleColorMode } = useColorMode()
   // const { isOpen, onOpen, onClose } = useDisclosure()
@@ -72,37 +106,7 @@ export default function NavBar() {
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
 
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  rounded={'full'}
-                  variant={'link'}
-                  cursor={'pointer'}
-                  minW={0}>
-                  <Avatar
-                    size={'sm'}
-                    src={'https://avatars.dicebear.com/api/adventurer/this%20is%20my%20avatgar.svg'}
-                  />
-                </MenuButton>
-                <MenuList alignItems={'center'}>
-                  <br />
-                  <Center>
-                    <Avatar
-                      size={'2xl'}
-                      src={'https://avatars.dicebear.com/api/adventurer/this%20is%20my%20avatgar.svg'}
-                    />
-                  </Center>
-                  <br />
-                  <Center>
-                    <p>Username</p>
-                  </Center>
-                  <br />
-                  <MenuDivider />
-                  <MenuItem>Your Servers</MenuItem>
-                  <MenuItem>Account Settings</MenuItem>
-                  <MenuItem>Logout</MenuItem>
-                </MenuList>
-              </Menu>
+              <NavMenu />
             </Stack>
           </Flex>
         </Flex>
